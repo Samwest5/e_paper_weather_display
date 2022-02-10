@@ -2,6 +2,7 @@ arandr==0.1.10
 astroid==2.5.1
 asttokens==2.0.4
 automationhat==0.2.0
+autopep8==1.6.0
 beautifulsoup4==4.9.3
 blinker==1.4
 blinkt==0.1.2
@@ -28,7 +29,6 @@ idna==2.10
 isort==5.6.4
 itsdangerous==1.1.0
 jedi==0.18.0
-Jetson.GPIO==2.0.17
 Jinja2==2.11.3
 lazy-object-proxy==0.0.0
 logilab-common==1.8.1
@@ -55,6 +55,7 @@ pigpio==1.78
 Pillow==8.1.2
 psutil==5.8.0
 pycairo==1.16.2
+pycodestyle==2.8.0
 pycups==2.0.1
 pygame==1.9.6
 Pygments==2.7.1

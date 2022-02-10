@@ -1,6 +1,8 @@
+#! usr/bin/python
 import os
 from lib.waveshare_epd import epd7in5_V2
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
+from time import sleep
 from PIL import Image, ImageDraw
 import requests
 import logging
@@ -92,11 +94,11 @@ def parse_response(response):
     max_temp = int(daily_temp['max'])
     min_temp = int(daily_temp['min'])
     image_file = f"assets/pic/icons/{icon_code}.png"
-    current_time = datetime.now(time_zone).strftime('%H:%M')
+    current_time = datetime.now(time_zone).strftime('%l:%M')
 
     return {
         "temperature": f"{current_temp}{degree_sign}F",
-        "low": f"Low: {min_temp}{degree_sign}F",
+        "low": f"Low:  {min_temp}{degree_sign}F",
         "high": f"High: {max_temp}{degree_sign}F",
         "feels_like": f"Feels like: {feels_like}{degree_sign}F",
         "humidity": f"Humidity: {humidity}%",
@@ -109,7 +111,7 @@ def parse_response(response):
 
 
 def weather():
-    logging.basicConfig(filename='weather_app.log',
+    logging.basicConfig(filename='weather.log',
                         encoding='utf-8', level=logging.DEBUG)
     logging.info("Awake: Initializing and Clearing screen")
     epd = epd7in5_V2.EPD()
@@ -131,4 +133,6 @@ def weather():
 
 
 if __name__ == "__main__":
-    weather()
+    while True:
+        weather()
+        sleep(refresh_seconds)

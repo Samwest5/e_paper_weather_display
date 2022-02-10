@@ -4,6 +4,7 @@ from PIL import ImageFont
 from datetime import timezone, timedelta
 load_dotenv()
 
+root = "/home/pi/e_paper_weather_display/"
 picdir = "assets/pic"
 icondir = "assets/icons"
 font = "assets/fonts/Font.ttc"
@@ -25,3 +26,4 @@ font160 = ImageFont.truetype(font, 160)
 black = "rgb(0,0,0)"
 white = "rgb(255,255,255)"
 grey = "rgb(235,235,235)"
+refresh_seconds = int(os.getenv("REFRESH_SECONDS"))
