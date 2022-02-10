@@ -2,7 +2,7 @@
 import os
 from lib.waveshare_epd import epd7in5_V2
 from datetime import datetime
-from time import sleep
+import time
 from PIL import Image, ImageDraw
 import requests
 import logging
@@ -11,7 +11,7 @@ from config import *
 
 def write_screen(epd, image_file):
     # Write to screen
-    h_image = Image.new('1', (epd.width, epd.height), 255)
+    h_image = Image.new("1", (epd.width, epd.height), 255)
     # Open the template
     screen_output_file = Image.open(image_file)
     # Initialize the drawing context with template as background
@@ -23,13 +23,13 @@ def write_screen(epd, image_file):
 def draw_error(epd):
     error_source = "INTERNAL"
     # Initialize drawing
-    error_image = Image.new('1', (epd.width, epd.height), 255)
+    error_image = Image.new("1", (epd.width, epd.height), 255)
     # Initialize the drawing
     draw = ImageDraw.Draw(error_image)
-    draw.text((100, 150), error_source + ' ERROR', font=font50, fill=black)
-    draw.text((100, 300), 'Retrying in 30 seconds', font=font22, fill=black)
-    current_time = datetime.now().strftime('%H:%M')
-    draw.text((300, 365), 'Last Refresh: ' +
+    draw.text((100, 150), error_source + " ERROR", font=font50, fill=black)
+    draw.text((100, 300), "Retrying in 30 seconds", font=font22, fill=black)
+    current_time = datetime.now().strftime("%H:%M")
+    draw.text((300, 365), "Last Refresh: " +
               str(current_time), font=font50, fill=black)
     # Save the error image
     error_image_file = f"{picdir}/error.png"
@@ -42,7 +42,7 @@ def draw_error(epd):
 
 def draw_image(epd, display_data):
    # Open template file
-    template = Image.open(os.path.join(picdir, 'template.png'))
+    template = Image.open(os.path.join(picdir, "template.png"))
     # Initialize the drawing context with template as background
     draw = ImageDraw.Draw(template)
     # Draw top left box
@@ -64,7 +64,7 @@ def draw_image(epd, display_data):
     draw.text((345, 340), display_data["humidity"], font=font30, fill=black)
     draw.text((345, 400), display_data["wind"], font=font30, fill=black)
     # Draw bottom right box
-    draw.text((627, 330), 'UPDATED', font=font35, fill=white)
+    draw.text((627, 330), "UPDATED", font=font35, fill=white)
     draw.text(
         (627, 375), display_data["current_time"], font=font60, fill=white)
     # Save the image for display as PNG
@@ -77,24 +77,24 @@ def draw_image(epd, display_data):
 
 
 def parse_response(response):
-    degree_sign = u'\N{DEGREE SIGN}'
+    degree_sign = u"\N{DEGREE SIGN}"
     data = response.json()
-    current = data['current']
-    current_temp = int(current['temp'])
-    feels_like = int(current['feels_like'])
-    humidity = current['humidity']
-    wind = current['wind_speed']
-    weather = current['weather']
-    report = weather[0]['description']
-    icon_code = weather[0]['icon']
-    daily = data['daily']
-    daily_precip_float = daily[0]['pop']
+    current = data["current"]
+    current_temp = int(current["temp"])
+    feels_like = int(current["feels_like"])
+    humidity = current["humidity"]
+    wind = current["wind_speed"]
+    weather = current["weather"]
+    report = weather[0]["description"]
+    icon_code = weather[0]["icon"]
+    daily = data["daily"]
+    daily_precip_float = daily[0]["pop"]
     daily_precip_percent = daily_precip_float * 100
-    daily_temp = daily[0]['temp']
-    max_temp = int(daily_temp['max'])
-    min_temp = int(daily_temp['min'])
+    daily_temp = daily[0]["temp"]
+    max_temp = int(daily_temp["max"])
+    min_temp = int(daily_temp["min"])
     image_file = f"assets/pic/icons/{icon_code}.png"
-    current_time = datetime.now(time_zone).strftime('%l:%M')
+    current_time = datetime.now(time_zone).strftime("%l:%M")
 
     return {
         "temperature": f"{current_temp}{degree_sign}F",
@@ -111,8 +111,8 @@ def parse_response(response):
 
 
 def weather():
-    logging.basicConfig(filename='weather.log',
-                        encoding='utf-8', level=logging.DEBUG)
+    logging.basicConfig(filename="weather.log",
+                        encoding="utf-8", level=logging.DEBUG)
     logging.info("Awake: Initializing and Clearing screen")
     epd = epd7in5_V2.EPD()
     epd.init()
@@ -127,7 +127,7 @@ def weather():
         image_file = draw_error(epd)
 
     finally:
-        logging.info('Attempting to write to screen')
+        logging.info("Attempting to write to screen")
         write_screen(epd, image_file)
         logging.info("Going back to sleep..")
 
@@ -135,4 +135,4 @@ def weather():
 if __name__ == "__main__":
     while True:
         weather()
-        sleep(refresh_seconds)
+        time.sleep(refresh_seconds)
