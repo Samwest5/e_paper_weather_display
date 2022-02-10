@@ -130,6 +130,7 @@ def weather():
         logging.info("Attempting to write to screen")
         write_screen(epd, image_file)
         logging.info("Going back to sleep..")
+        epd.sleep(refresh_seconds - 1)
 
 
 if __name__ == "__main__":
